@@ -1,24 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="55n-gl-QFN">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Globe View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="GlobeViewController" customModule="MyTravelMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1wa-3S-3o2">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                                <standardMapConfiguration key="preferredConfiguration"/>
+                            </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oOB-hn-j1y">
+                                <rect key="frame" x="328" y="50" width="50" height="70"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map_icon" translatesAutoresizingMaskIntoConstraints="NO" id="OO6-kV-Fnq">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="70"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LVM-Yh-8hC">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="70"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain"/>
+                                        <connections>
+                                            <action selector="addCountryButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fbW-LX-eUT"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="LVM-Yh-8hC" secondAttribute="bottom" id="87g-hS-GTi"/>
+                                    <constraint firstAttribute="trailing" secondItem="LVM-Yh-8hC" secondAttribute="trailing" id="Dpo-ja-MQ6"/>
+                                    <constraint firstItem="LVM-Yh-8hC" firstAttribute="top" secondItem="oOB-hn-j1y" secondAttribute="top" id="Qdt-Vs-41D"/>
+                                    <constraint firstItem="OO6-kV-Fnq" firstAttribute="top" secondItem="oOB-hn-j1y" secondAttribute="top" id="V0X-VX-UDP"/>
+                                    <constraint firstAttribute="bottom" secondItem="OO6-kV-Fnq" secondAttribute="bottom" id="V2F-3g-UY2"/>
+                                    <constraint firstAttribute="width" constant="50" id="V7O-0x-1Nr"/>
+                                    <constraint firstAttribute="trailing" secondItem="OO6-kV-Fnq" secondAttribute="trailing" id="bUC-ti-hdE"/>
+                                    <constraint firstItem="OO6-kV-Fnq" firstAttribute="leading" secondItem="oOB-hn-j1y" secondAttribute="leading" id="evE-aZ-BQJ"/>
+                                    <constraint firstAttribute="height" constant="70" id="fTx-bd-hcd"/>
+                                    <constraint firstItem="LVM-Yh-8hC" firstAttribute="leading" secondItem="oOB-hn-j1y" secondAttribute="leading" id="tbg-Mn-ZNF"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="1wa-3S-3o2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="K4a-5H-4Jz"/>
+                            <constraint firstItem="1wa-3S-3o2" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ZUo-wb-Zio"/>
+                            <constraint firstItem="oOB-hn-j1y" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="50" id="fid-bs-i0L"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="oOB-hn-j1y" secondAttribute="trailing" constant="15" id="jLg-0x-Set"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1wa-3S-3o2" secondAttribute="trailing" id="mvG-BE-HhX"/>
+                            <constraint firstAttribute="bottom" secondItem="1wa-3S-3o2" secondAttribute="bottom" id="x3c-Xx-DSM"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="4WB-Cu-CPM"/>
+                    <connections>
+                        <outlet property="mapView" destination="1wa-3S-3o2" id="ndv-KH-ciD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="907.63358778625945" y="-266.19718309859155"/>
+        </scene>
+        <!--Countries List View Controller-->
+        <scene sceneID="g0N-SX-Bmx">
+            <objects>
+                <viewController storyboardIdentifier="CountriesListViewController" id="KCp-iC-vDw" customClass="CountriesListViewController" customModule="MyTravelMap" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="QYM-HC-sbe">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y34-dm-P9i" customClass="CountryPickerView" customModule="CountryPickerView">
+                                <rect key="frame" x="20" y="59" width="353" height="45"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="7lm-8j-Vhk"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="mpm-Zv-dsn">
+                                <rect key="frame" x="0.0" y="104" width="393" height="714"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="8G6-kt-b7f"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Y34-dm-P9i" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" constant="20" id="Mwz-K0-anC"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="Y34-dm-P9i" secondAttribute="trailing" constant="20" id="NMr-ae-gKK"/>
+                            <constraint firstItem="Y34-dm-P9i" firstAttribute="top" secondItem="8G6-kt-b7f" secondAttribute="top" id="Q5b-hg-GUV"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="mpm-Zv-dsn" secondAttribute="trailing" id="UFL-XM-Pvf"/>
+                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="top" secondItem="Y34-dm-P9i" secondAttribute="bottom" id="c1q-Yo-uwQ"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="bottom" secondItem="mpm-Zv-dsn" secondAttribute="bottom" id="kbK-Q9-Jh6"/>
+                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" id="mwI-Vp-9H4"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="nWe-oc-MKX"/>
+                    <connections>
+                        <outlet property="countriesTableView" destination="mpm-Zv-dsn" id="cWw-7x-fOD"/>
+                        <outlet property="countryPickerView" destination="Y34-dm-P9i" id="24z-eD-cN4"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Bz1-fc-S3h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1790" y="-266"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="bP4-eH-u1A">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="55n-gl-QFN" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8Wa-O0-dU8">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="hJt-pv-PCV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3rk-P8-m7R" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="75.572519083969468" y="3.5211267605633805"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="map_icon" width="512" height="512"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

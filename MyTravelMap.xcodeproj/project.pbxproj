@@ -7,23 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD8509312C9B31CC00AE5FD3 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = DD8509302C9B31CC00AE5FD3 /* CountryPickerView */; };
+		DD8509342C9B499300AE5FD3 /* CountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */; };
+		DD8509352C9B499300AE5FD3 /* CountryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */; };
 		DDA159E72C73967100D9B721 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA159E62C73967100D9B721 /* AppDelegate.swift */; };
 		DDA159E92C73967100D9B721 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA159E82C73967100D9B721 /* SceneDelegate.swift */; };
-		DDA159EB2C73967100D9B721 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA159EA2C73967100D9B721 /* ViewController.swift */; };
+		DDA159EB2C73967100D9B721 /* GlobeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA159EA2C73967100D9B721 /* GlobeViewController.swift */; };
 		DDA159EE2C73967100D9B721 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDA159EC2C73967100D9B721 /* Main.storyboard */; };
 		DDA159F02C73967200D9B721 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA159EF2C73967200D9B721 /* Assets.xcassets */; };
 		DDA159F32C73967200D9B721 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDA159F12C73967200D9B721 /* LaunchScreen.storyboard */; };
+		DDD7DE672C76533D007B6F86 /* CountriesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCell.swift; sourceTree = "<group>"; };
+		DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryTableViewCell.xib; sourceTree = "<group>"; };
 		DDA159E32C73967100D9B721 /* MyTravelMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTravelMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA159E62C73967100D9B721 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDA159E82C73967100D9B721 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		DDA159EA2C73967100D9B721 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DDA159EA2C73967100D9B721 /* GlobeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobeViewController.swift; sourceTree = "<group>"; };
 		DDA159ED2C73967100D9B721 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DDA159EF2C73967200D9B721 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DDA159F22C73967200D9B721 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DDA159F42C73967200D9B721 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD8509312C9B31CC00AE5FD3 /* CountryPickerView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,7 +66,10 @@
 			children = (
 				DDA159E62C73967100D9B721 /* AppDelegate.swift */,
 				DDA159E82C73967100D9B721 /* SceneDelegate.swift */,
-				DDA159EA2C73967100D9B721 /* ViewController.swift */,
+				DDA159EA2C73967100D9B721 /* GlobeViewController.swift */,
+				DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */,
+				DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */,
+				DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */,
 				DDA159EC2C73967100D9B721 /* Main.storyboard */,
 				DDA159EF2C73967200D9B721 /* Assets.xcassets */,
 				DDA159F12C73967200D9B721 /* LaunchScreen.storyboard */,
@@ -83,6 +94,9 @@
 			dependencies = (
 			);
 			name = MyTravelMap;
+			packageProductDependencies = (
+				DD8509302C9B31CC00AE5FD3 /* CountryPickerView */,
+			);
 			productName = MyTravelMap;
 			productReference = DDA159E32C73967100D9B721 /* MyTravelMap.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +125,9 @@
 				Base,
 			);
 			mainGroup = DDA159DA2C73967100D9B721;
+			packageReferences = (
+				DD85092F2C9B31CC00AE5FD3 /* XCRemoteSwiftPackageReference "CountryPickerView" */,
+			);
 			productRefGroup = DDA159E42C73967100D9B721 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,6 +142,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD8509352C9B499300AE5FD3 /* CountryTableViewCell.xib in Resources */,
 				DDA159F32C73967200D9B721 /* LaunchScreen.storyboard in Resources */,
 				DDA159F02C73967200D9B721 /* Assets.xcassets in Resources */,
 				DDA159EE2C73967100D9B721 /* Main.storyboard in Resources */,
@@ -138,9 +156,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA159EB2C73967100D9B721 /* ViewController.swift in Sources */,
+				DDA159EB2C73967100D9B721 /* GlobeViewController.swift in Sources */,
+				DDD7DE672C76533D007B6F86 /* CountriesListViewController.swift in Sources */,
 				DDA159E72C73967100D9B721 /* AppDelegate.swift in Sources */,
 				DDA159E92C73967100D9B721 /* SceneDelegate.swift in Sources */,
+				DD8509342C9B499300AE5FD3 /* CountryTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +312,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55WUFR84L6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyTravelMap/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -319,6 +340,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 55WUFR84L6;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyTravelMap/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -361,6 +383,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD85092F2C9B31CC00AE5FD3 /* XCRemoteSwiftPackageReference "CountryPickerView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kizitonwose/CountryPickerView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD8509302C9B31CC00AE5FD3 /* CountryPickerView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD85092F2C9B31CC00AE5FD3 /* XCRemoteSwiftPackageReference "CountryPickerView" */;
+			productName = CountryPickerView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DDA159DB2C73967100D9B721 /* Project object */;
 }
