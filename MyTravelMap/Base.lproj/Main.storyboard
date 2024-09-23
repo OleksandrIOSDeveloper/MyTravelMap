@@ -81,28 +81,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y34-dm-P9i" customClass="CountryPickerView" customModule="CountryPickerView">
-                                <rect key="frame" x="20" y="59" width="353" height="45"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kMY-0w-oJG">
+                                <rect key="frame" x="15" y="59" width="363" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="7lm-8j-Vhk"/>
+                                    <constraint firstAttribute="height" constant="20" id="RVr-1Y-007"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="labelColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="plus.circle" catalog="system" title="Add Country " imagePadding="5">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W6" family="Hiragino Mincho ProN" pointSize="17"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="selectCountryButton:" destination="KCp-iC-vDw" eventType="touchUpInside" id="mSK-ah-jSA"/>
+                                </connections>
+                            </button>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y34-dm-P9i" customClass="CountryPickerView" customModule="CountryPickerView">
+                                <rect key="frame" x="20" y="59" width="353" height="15"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="vzn-n8-6qb"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="mpm-Zv-dsn">
-                                <rect key="frame" x="0.0" y="104" width="393" height="714"/>
+                                <rect key="frame" x="15" y="89" width="363" height="729"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="8G6-kt-b7f"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Y34-dm-P9i" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" constant="20" id="Mwz-K0-anC"/>
-                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="Y34-dm-P9i" secondAttribute="trailing" constant="20" id="NMr-ae-gKK"/>
-                            <constraint firstItem="Y34-dm-P9i" firstAttribute="top" secondItem="8G6-kt-b7f" secondAttribute="top" id="Q5b-hg-GUV"/>
-                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="mpm-Zv-dsn" secondAttribute="trailing" id="UFL-XM-Pvf"/>
-                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="top" secondItem="Y34-dm-P9i" secondAttribute="bottom" id="c1q-Yo-uwQ"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="Y34-dm-P9i" secondAttribute="trailing" constant="20" id="0NE-69-PX9"/>
+                            <constraint firstItem="Y34-dm-P9i" firstAttribute="top" secondItem="8G6-kt-b7f" secondAttribute="top" id="4po-v5-6VW"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="kMY-0w-oJG" secondAttribute="trailing" constant="15" id="EeW-FC-9Y1"/>
+                            <constraint firstItem="Y34-dm-P9i" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" constant="20" id="KVi-DS-ugg"/>
+                            <constraint firstItem="kMY-0w-oJG" firstAttribute="top" secondItem="QYM-HC-sbe" secondAttribute="topMargin" id="NfX-HD-vpg"/>
+                            <constraint firstItem="kMY-0w-oJG" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" constant="15" id="TIx-Mz-DQz"/>
+                            <constraint firstItem="8G6-kt-b7f" firstAttribute="trailing" secondItem="mpm-Zv-dsn" secondAttribute="trailing" constant="15" id="UFL-XM-Pvf"/>
+                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="top" secondItem="kMY-0w-oJG" secondAttribute="bottom" constant="10" id="c1q-Yo-uwQ"/>
                             <constraint firstItem="8G6-kt-b7f" firstAttribute="bottom" secondItem="mpm-Zv-dsn" secondAttribute="bottom" id="kbK-Q9-Jh6"/>
-                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" id="mwI-Vp-9H4"/>
+                            <constraint firstItem="mpm-Zv-dsn" firstAttribute="leading" secondItem="8G6-kt-b7f" secondAttribute="leading" constant="15" id="mwI-Vp-9H4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="nWe-oc-MKX"/>
@@ -136,6 +153,10 @@
     </scenes>
     <resources>
         <image name="map_icon" width="512" height="512"/>
+        <image name="plus.circle" catalog="system" width="128" height="123"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
