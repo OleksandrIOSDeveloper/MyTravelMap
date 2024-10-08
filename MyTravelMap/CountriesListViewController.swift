@@ -50,7 +50,6 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(countryArray)
         return countryArray.count
     }
     

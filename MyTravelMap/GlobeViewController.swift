@@ -5,67 +5,6 @@
 //  Created by Александр Родителев on 19.08.2024.
 //
 //
-//import UIKit
-//import MapKit
-//import CoreLocation
-//
-//class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
-//    
-//    @IBOutlet var mapView: MKMapView!
-//    
-//    let locationManager = CLLocationManager()
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        mapView.delegate = self
-//        locationManager.delegate = self
-//        mapView.mapType = .hybridFlyover
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.startUpdatingLocation()
-//        
-//        setInitialMapCamera()
-//        
-////        let searchRequest = MKLocalSearch.Request()
-////            searchRequest.naturalLanguageQuery = "USA"
-////            
-////            let search = MKLocalSearch(request: searchRequest)
-////            
-////            search.start { response, error in
-////                guard let response = response else {
-////                    print("Error: \(error?.localizedDescription ?? "Unknown error").")
-////                    return
-////                }
-////                
-////                self.mapView.setRegion(response.boundingRegion, animated: true)
-////            }
-//        
-//    }
-//    
-//    private func setInitialMapCamera() {
-//        let centerCoordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-//        let camera = MKMapCamera(lookingAtCenter: centerCoordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
-//        mapView.setCamera(camera, animated: true)
-//    }
-//
-//    @IBAction func addCountryButton(_ sender: Any) {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        if let countriesListVC = storyboard.instantiateViewController(withIdentifier: "CountriesListViewController") as? CountriesListViewController {
-//            self.navigationController?.pushViewController(countriesListVC, animated: true)
-//        }
-//    }
-//    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-//    }
-//    
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        self.navigationController?.setNavigationBarHidden(false, animated: animated)
-//        
-//    }
-//    
-//}
 
 import UIKit
 import MapKit
@@ -76,6 +15,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     @IBOutlet var mapView: MKMapView!
     
     let locationManager = CLLocationManager()
+    var selectedOrSavedCountries: [CountryData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,11 +26,18 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         locationManager.startUpdatingLocation()
         
         setInitialMapCamera()
-        
-        
-        
+        loadCountries()
         if let geoJSON = loadGeoJSON() {
             addSelectedCountriesPolygons(geoJSON: geoJSON) // Добавляем выбранные страны на карту
+        }
+    }
+    
+    func loadCountries() {
+        if let savedCountriesData = UserDefaults.standard.data(forKey: "SavedCountries") {
+            let decoder = JSONDecoder()
+            if let loadedCountries = try? decoder.decode([CountryData].self, from: savedCountriesData) {
+                selectedOrSavedCountries = loadedCountries
+            }
         }
     }
     
@@ -116,10 +63,10 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     }
     
     private func addSelectedCountriesPolygons(geoJSON: GeoJSON) {
-        let selectedCountries = ["UKR", "HRV", "FRA",] // ISO3 коды стран
+        let selectedCountry = selectedOrSavedCountries.map { $0.name }
         
         for feature in geoJSON.features {
-            if selectedCountries.contains(feature.id ?? "") { // Проверяем наличие кода страны
+            if let countryName = feature.properties?.name, selectedCountry.contains(countryName) {
                 guard let geometry = feature.geometry else { continue }
                 
                 switch geometry.type {
@@ -161,8 +108,6 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
     
-    
-    
     // Делегатный метод для рендеринга overlay
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polygonOverlay = overlay as? MKPolygon {
@@ -174,6 +119,16 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
         return MKOverlayRenderer()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadCountries()
+        mapView.removeOverlays(mapView.overlays)
+        if let geoJSON = loadGeoJSON() {
+            addSelectedCountriesPolygons(geoJSON: geoJSON)
+        }
+    }
+    
     @IBAction func addCountryButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let countriesListVC = storyboard.instantiateViewController(withIdentifier: "CountriesListViewController") as? CountriesListViewController {
