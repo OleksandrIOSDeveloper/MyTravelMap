@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD09D3A02CB574F8009A01DA /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD09D39F2CB574F8009A01DA /* ExtensionUIColor.swift */; };
 		DD3FD02F2CA1BC7500A1B54C /* CountryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3FD02E2CA1BC7500A1B54C /* CountryData.swift */; };
 		DD8509312C9B31CC00AE5FD3 /* CountryPickerView in Frameworks */ = {isa = PBXBuildFile; productRef = DD8509302C9B31CC00AE5FD3 /* CountryPickerView */; };
 		DD8509342C9B499300AE5FD3 /* CountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD09D39F2CB574F8009A01DA /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
 		DD3FD02E2CA1BC7500A1B54C /* CountryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryData.swift; sourceTree = "<group>"; };
 		DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCell.swift; sourceTree = "<group>"; };
 		DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryTableViewCell.xib; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				DD9EE0D12CAC463600CB49AB /* ModelGeoJson.swift */,
 				DDA159E82C73967100D9B721 /* SceneDelegate.swift */,
 				DDA159EA2C73967100D9B721 /* GlobeViewController.swift */,
+				DD09D39F2CB574F8009A01DA /* ExtensionUIColor.swift */,
 				DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */,
 				DD3FD02E2CA1BC7500A1B54C /* CountryData.swift */,
 				DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */,
@@ -169,6 +172,7 @@
 				DDA159EB2C73967100D9B721 /* GlobeViewController.swift in Sources */,
 				DDD7DE672C76533D007B6F86 /* CountriesListViewController.swift in Sources */,
 				DDA159E72C73967100D9B721 /* AppDelegate.swift in Sources */,
+				DD09D3A02CB574F8009A01DA /* ExtensionUIColor.swift in Sources */,
 				DDA159E92C73967100D9B721 /* SceneDelegate.swift in Sources */,
 				DD9EE0D22CAC463600CB49AB /* ModelGeoJson.swift in Sources */,
 				DD3FD02F2CA1BC7500A1B54C /* CountryData.swift in Sources */,

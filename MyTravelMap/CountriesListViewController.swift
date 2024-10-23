@@ -12,6 +12,7 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
   
     @IBOutlet var countriesTableView: UITableView!
     @IBOutlet var countryPickerView: CountryPickerView!
+    @IBOutlet var backButton: UIButton!
     
     var countryArray: [CountryData] = []
     
@@ -40,11 +41,16 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
         countryPickerView.showCountriesList(from: self)
     }
     
+    @IBAction func backButton(_ sender: Any) {
+        navigationController?.popViewController(animated: true)
+    }
+    
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: CPVCountry) {
         if !countryArray.contains(where: { $0.code == country.code }) {
             let countryData = CountryData(country: country) // Создаем объект CountryData
             countryArray.append(countryData)
             saveCountries()
+            print(countryData)//
             countriesTableView.reloadData()
         }
     }

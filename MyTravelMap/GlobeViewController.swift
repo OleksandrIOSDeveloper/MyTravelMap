@@ -112,8 +112,8 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polygonOverlay = overlay as? MKPolygon {
             let renderer = MKPolygonRenderer(polygon: polygonOverlay)
-            renderer.fillColor = UIColor.red.withAlphaComponent(0.5)
-            renderer.strokeColor = UIColor.red
+            renderer.fillColor = UIColor(hex: "#eac500", alpha: 0.8)
+            renderer.strokeColor = UIColor(hex: "#eac500")
             renderer.lineWidth = 2
             return renderer
         }
