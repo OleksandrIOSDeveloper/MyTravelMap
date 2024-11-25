@@ -27,10 +27,27 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         setInitialMapCamera()
         loadCountries()
+        NotificationCenter.default.addObserver(self, selector: #selector(countrySelected(_:)), name: Notification.Name("CountrySelected"), object: nil)
         if let geoJSON = loadGeoJSON() {
             addSelectedCountriesPolygons(geoJSON: geoJSON) // Добавляем выбранные страны на карту
         }
     }
+    
+    @objc func countrySelected(_ notification: Notification) {
+         if let userInfo = notification.userInfo, let countryData = userInfo["countryData"] as? CountryData {
+             // Добавляем выбранную страну в список стран
+             if !selectedOrSavedCountries.contains(where: { $0.code == countryData.code }) {
+                 selectedOrSavedCountries.append(countryData)
+               //  saveCountries()
+
+        
+                 mapView.removeOverlays(mapView.overlays)
+                 if let geoJSON = loadGeoJSON() {
+                     addSelectedCountriesPolygons(geoJSON: geoJSON)
+                 }
+             }
+         }
+     }
     
     func loadCountries() {
         if let savedCountriesData = UserDefaults.standard.data(forKey: "SavedCountries") {
@@ -39,12 +56,6 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
                 selectedOrSavedCountries = loadedCountries
             }
         }
-    }
-    
-    private func setInitialMapCamera() {
-        let centerCoordinate = CLLocationCoordinate2D(latitude: 48.3794, longitude: 31.1656) // Центр Украины
-        let camera = MKMapCamera(lookingAtCenter: centerCoordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
-        mapView.setCamera(camera, animated: true)
     }
     
     // Функция для загрузки GeoJSON файла
@@ -128,6 +139,55 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             addSelectedCountriesPolygons(geoJSON: geoJSON)
         }
     }
+    
+    
+    // Если пользователь разрешил использовать геопозицию
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = manager.authorizationStatus
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    // Метод делегата, который срабатывает при получении локации
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        let userCoordinate = location.coordinate
+        
+        // Настроим камеру на текущие координаты пользователя
+        setMapCamera(to: userCoordinate)
+        
+        // Останавливаем обновление локации после получения данных
+        locationManager.stopUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Не удалось получить локацию: \(error.localizedDescription)")
+    }
+    
+    // Устанавливаем начальное местоположение на центр Украины
+    private func setInitialMapCamera() {
+        let centerCoordinate = CLLocationCoordinate2D(latitude: 48.3794, longitude: 31.1656) // Центр Украины
+        let camera = MKMapCamera(lookingAtCenter: centerCoordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
+        mapView.setCamera(camera, animated: true)
+    }
+    
+    // Настроить камеру на координаты пользователя
+    private func setMapCamera(to coordinate: CLLocationCoordinate2D) {
+        let camera = MKMapCamera(lookingAtCenter: coordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
+        mapView.setCamera(camera, animated: true)
+    }
+  
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("CountrySelected"), object: nil)
+    }
+    
+    
+    
+    @IBAction func playAnimationButton(_ sender: Any) {
+        
+    }
+    
     
     @IBAction func addCountryButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

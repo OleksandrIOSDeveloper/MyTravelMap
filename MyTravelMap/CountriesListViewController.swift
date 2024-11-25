@@ -7,35 +7,43 @@
 
 import UIKit
 import CountryPickerView
+import CoreLocation
 
-class CountriesListViewController: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource, UITableViewDataSource, UITableViewDelegate, UITableViewDragDelegate {
+class CountriesListViewController: UIViewController, CountryPickerViewDelegate, CountryPickerViewDataSource, UITableViewDataSource, UITableViewDelegate, UITableViewDragDelegate, CLLocationManagerDelegate {
   
     @IBOutlet var countriesTableView: UITableView!
     @IBOutlet var countryPickerView: CountryPickerView!
     @IBOutlet var backButton: UIButton!
     
     var countryArray: [CountryData] = []
+    var locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
         loadCountries()
-        
-        countryPickerView.delegate = self
-        countryPickerView.dataSource = self
-        
-        countriesTableView.dataSource = self
-        countriesTableView.delegate = self
-        countriesTableView.dragDelegate = self
-        countriesTableView.dragInteractionEnabled = true
-        
-        countriesTableView.separatorStyle = .none
-        countriesTableView.dragInteractionEnabled = true
-        countriesTableView.allowsSelection = false
-        
-        let nib = UINib(nibName: "CountryTableViewCell", bundle: nil)
-        countriesTableView.register(nib, forCellReuseIdentifier: "CountryTableViewCell")
+        setupUI()
     }
+    
+    func setupUI() {
+           countryPickerView.delegate = self
+           countryPickerView.dataSource = self
+           
+           countriesTableView.dataSource = self
+           countriesTableView.delegate = self
+           countriesTableView.dragDelegate = self
+           countriesTableView.dragInteractionEnabled = true
+           
+           countriesTableView.separatorStyle = .none
+           countriesTableView.dragInteractionEnabled = true
+           countriesTableView.allowsSelection = false
+           
+           let nib = UINib(nibName: "CountryTableViewCell", bundle: nil)
+           countriesTableView.register(nib, forCellReuseIdentifier: "CountryTableViewCell")
+       }
     
     @IBAction func selectCountryButton(_ sender: Any) {
         countryPickerView.showCountriesList(from: self)
@@ -118,6 +126,69 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
             }
         }
     }
-}
+    
+    // MARK: - CLLocationManagerDelegate
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+          let status = manager.authorizationStatus
+          
+          switch status {
+          case .authorizedWhenInUse, .authorizedAlways:
+              // Стартуем обновление локации только если разрешение дано
+              locationManager.startUpdatingLocation()
+          case .denied, .restricted:
+              print("Разрешение на использование локации запрещено")
+          case .notDetermined:
+              // Если статус еще не определен, ничего не делаем
+              break
+          @unknown default:
+              break
+          }
+      }
+    
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        
+        // Останавливаем обновления локации
+        locationManager.stopUpdatingLocation()
+        
+        // Получаем страну на основе геолокации
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
+            if let error = error {
+                print("Ошибка геокодирования: \(error)")
+                return
+            }
+            
+            if let placemark = placemarks?.first, let countryCode = placemark.isoCountryCode {
+                self?.setCountryFromLocation(countryCode: countryCode)
+            }
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Не удалось получить локацию: \(error.localizedDescription)")
+    }
+   
+    func setCountryFromLocation(countryCode: String) {
+        // Находим страну в CountryPickerView по ISO-коду
+        if let country = countryPickerView.countries.first(where: { $0.code == countryCode }) {
+            let countryData = CountryData(country: country)
+            
+            // Добавляем страну в начало массива countryArray
+            if !countryArray.contains(where: { $0.code == country.code }) {
+                countryArray.insert(countryData, at: 0)
+                saveCountries()
+                countriesTableView.reloadData()
+                NotificationCenter.default.post(name: Notification.Name("CountrySelected"), object: nil, userInfo: ["countryData": countryData])
+                     }
+            }
+            
+        }
+    }
+
+    
+    
+
 
 
