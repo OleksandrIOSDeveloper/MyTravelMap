@@ -16,6 +16,8 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     let locationManager = CLLocationManager()
     var selectedOrSavedCountries: [CountryData] = []
+    var currentCountryIndex: Int = 0
+    var timer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,11 +183,111 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     deinit {
         NotificationCenter.default.removeObserver(self, name: Notification.Name("CountrySelected"), object: nil)
     }
+ 
+    func resetAllCountryHighlights() {
+        mapView.removeOverlays(mapView.overlays)
+    }
+
+    func highlightCountry(at index: Int) {
+        guard index < selectedOrSavedCountries.count else { return }
+        let country = selectedOrSavedCountries[index]
+        
+        if let geoJSON = loadGeoJSON() {
+            // Фильтруем GeoJSON, чтобы оставить только нужную страну
+            let filteredGeoJSON = GeoJSON(
+                type: geoJSON.type,
+                features: geoJSON.features.filter { $0.properties?.name == country.name }
+            )
+            
+            // Добавляем полигон на карту
+            addSelectedCountriesPolygons(geoJSON: filteredGeoJSON)
+            
+            // Перемещаем камеру к области полигона
+            moveToPolygon(for: filteredGeoJSON)
+        }
+    }
     
+    func moveToPolygon(for geoJSON: GeoJSON) {
+        var boundingMapRect: MKMapRect = .null
+        
+        for feature in geoJSON.features {
+            guard let geometry = feature.geometry else { continue }
+            
+            switch geometry.type {
+            case "Polygon":
+                if case let .polygon(coordinates) = geometry.coordinates {
+                    for ring in coordinates {
+                        let polygon = createPolygon(from: ring)
+                        boundingMapRect = boundingMapRect.union(polygon.boundingMapRect)
+                    }
+                }
+            case "MultiPolygon":
+                if case let .multiPolygon(coordinates) = geometry.coordinates {
+                    for polygon in coordinates {
+                        for ring in polygon {
+                            let polygon = createPolygon(from: ring)
+                            boundingMapRect = boundingMapRect.union(polygon.boundingMapRect)
+                        }
+                    }
+                }
+            default:
+                continue
+            }
+        }
+        
+        // Перемещаем камеру к области полигона
+        if !boundingMapRect.isNull {
+            mapView.setVisibleMapRect(boundingMapRect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
+        }
+    }
+
+    private func createPolygon(from coordinatesArray: [[Double]]) -> MKPolygon {
+        var coordinates = [CLLocationCoordinate2D]()
+        for coordinatePair in coordinatesArray {
+            if coordinatePair.count == 2 {
+                let longitude = coordinatePair[0]
+                let latitude = coordinatePair[1]
+                coordinates.append(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+            }
+        }
+        return MKPolygon(coordinates: coordinates, count: coordinates.count)
+    }
+
     
+    func highlightNextCountry() {
+        // Если все страны подсвечены, останавливаем таймер
+        if currentCountryIndex >= selectedOrSavedCountries.count {
+            timer?.invalidate()
+            timer = nil
+            return
+        }
+        
+        // Подсвечиваем текущую страну
+        highlightCountry(at: currentCountryIndex)
+        
+        // Увеличиваем индекс
+        currentCountryIndex += 1
+    }
+
     
     @IBAction func playAnimationButton(_ sender: Any) {
+        // Сбросить все подсветки
+        resetAllCountryHighlights()
         
+        // Сброс индекса
+        currentCountryIndex = 0
+        
+        // Остановить предыдущий таймер, если он запущен
+        timer?.invalidate()
+        
+        // Задержка перед началом анимации
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            // Запуск таймера
+            self.timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+                guard let self = self else { return }
+                self.highlightNextCountry()
+            }
+        }
     }
     
     
