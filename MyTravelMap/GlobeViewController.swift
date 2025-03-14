@@ -259,6 +259,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         if currentCountryIndex >= selectedOrSavedCountries.count {
             timer?.invalidate()
             timer = nil
+            setInitialMapCamera()
             return
         }
         
@@ -272,6 +273,8 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     @IBAction func playAnimationButton(_ sender: Any) {
         // Сбросить все подсветки
+        setInitialMapCamera()
+        
         resetAllCountryHighlights()
         
         // Сброс индекса
