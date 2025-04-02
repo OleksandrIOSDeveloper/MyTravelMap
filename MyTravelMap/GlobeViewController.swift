@@ -9,8 +9,9 @@
 import UIKit
 import MapKit
 import CoreLocation
+import ReplayKit
 
-class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
+class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, RPPreviewViewControllerDelegate {
     
     @IBOutlet var mapView: MKMapView!
     
@@ -259,7 +260,8 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         if currentCountryIndex >= selectedOrSavedCountries.count {
             timer?.invalidate()
             timer = nil
-            setInitialMapCamera()
+         //   setInitialMapCamera()
+            stopRecording()
             return
         }
         
@@ -268,15 +270,48 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         
         // Увеличиваем индекс
         currentCountryIndex += 1
+        
+        
     }
-
+ 
+    func startRecording() {
+        let recorder = RPScreenRecorder.shared()
+        guard recorder.isAvailable else {
+            print("Запись экрана недоступна на данном устройстве")
+            return
+        }
+        recorder.startRecording { error in
+            if let error = error {
+                print("Ошибка при запуске записи: \(error.localizedDescription)")
+            } else {
+                print("Запись началась")
+            }
+        }
+    }
+    
+    func stopRecording() {
+           let recorder = RPScreenRecorder.shared()
+           recorder.stopRecording { [weak self] (previewController, error) in
+               if let error = error {
+                   print("Ошибка при остановке записи: \(error.localizedDescription)")
+                   return
+               }
+               if let previewController = previewController {
+                   previewController.previewControllerDelegate = self
+                   self?.present(previewController, animated: true, completion: nil)
+               }
+           }
+       }
+    func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
+        previewController.dismiss(animated: true, completion: nil)
+    }
     
     @IBAction func playAnimationButton(_ sender: Any) {
+       
         // Сбросить все подсветки
         setInitialMapCamera()
-        
+        startRecording()
         resetAllCountryHighlights()
-        
         // Сброс индекса
         currentCountryIndex = 0
         
@@ -284,7 +319,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         timer?.invalidate()
         
         // Задержка перед началом анимации
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline:  .now() + 1.0) {
             // Запуск таймера
             self.timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
                 guard let self = self else { return }
