@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MyTravelMap
 //
-//  Created by Александр Родителев on 19.08.2024.
+//  Created by Oleksandr Roditeiliev on 19.08.2024.
 //
 //
 
@@ -14,11 +14,14 @@ import ReplayKit
 class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, RPPreviewViewControllerDelegate {
     
     @IBOutlet var mapView: MKMapView!
+    @IBOutlet var buttonsStackView: UIStackView!
     
     let locationManager = CLLocationManager()
     var selectedOrSavedCountries: [CountryData] = []
     var currentCountryIndex: Int = 0
     var timer: Timer?
+    let recorder = RPScreenRecorder.shared()
+    var defaultCoordinate = CLLocationCoordinate2D(latitude: 48.3794, longitude: 31.1656) // Center of Ukraine
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,30 +30,26 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         mapView.mapType = .hybridFlyover
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        
         setInitialMapCamera()
         loadCountries()
         NotificationCenter.default.addObserver(self, selector: #selector(countrySelected(_:)), name: Notification.Name("CountrySelected"), object: nil)
         if let geoJSON = loadGeoJSON() {
-            addSelectedCountriesPolygons(geoJSON: geoJSON) // Добавляем выбранные страны на карту
+            addSelectedCountriesPolygons(geoJSON: geoJSON) // Add selected countries to the map
         }
     }
     
     @objc func countrySelected(_ notification: Notification) {
-         if let userInfo = notification.userInfo, let countryData = userInfo["countryData"] as? CountryData {
-             // Добавляем выбранную страну в список стран
-             if !selectedOrSavedCountries.contains(where: { $0.code == countryData.code }) {
-                 selectedOrSavedCountries.append(countryData)
-               //  saveCountries()
-
-        
-                 mapView.removeOverlays(mapView.overlays)
-                 if let geoJSON = loadGeoJSON() {
-                     addSelectedCountriesPolygons(geoJSON: geoJSON)
-                 }
-             }
-         }
-     }
+        if let userInfo = notification.userInfo, let countryData = userInfo["countryData"] as? CountryData {
+            if !selectedOrSavedCountries.contains(where: { $0.code == countryData.code }) {
+                selectedOrSavedCountries.append(countryData)
+                //  saveCountries()
+                mapView.removeOverlays(mapView.overlays)
+                if let geoJSON = loadGeoJSON() {
+                    addSelectedCountriesPolygons(geoJSON: geoJSON)
+                }
+            }
+        }
+    }
     
     func loadCountries() {
         if let savedCountriesData = UserDefaults.standard.data(forKey: "SavedCountries") {
@@ -61,7 +60,6 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
     
-    // Функция для загрузки GeoJSON файла
     func loadGeoJSON() -> GeoJSON? {
         if let url = Bundle.main.url(forResource: "countries", withExtension: "geo.json") {
             do {
@@ -70,7 +68,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
                 let geoJSON = try decoder.decode(GeoJSON.self, from: data)
                 return geoJSON
             } catch {
-                print("Ошибка при загрузке JSON: \(error)")
+                print("Error loading JSON: \(error)")
             }
         }
         return nil
@@ -78,21 +76,17 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
     
     private func addSelectedCountriesPolygons(geoJSON: GeoJSON) {
         let selectedCountry = selectedOrSavedCountries.map { $0.name }
-        
         for feature in geoJSON.features {
             if let countryName = feature.properties?.name, selectedCountry.contains(countryName) {
                 guard let geometry = feature.geometry else { continue }
-                
                 switch geometry.type {
                 case "Polygon":
-                    // Обработка обычного полигона
                     if case let .polygon(coordinates) = geometry.coordinates {
                         for ring in coordinates {
                             addPolygon(from: ring)
                         }
                     }
                 case "MultiPolygon":
-                    // Обработка мультиполигона
                     if case let .multiPolygon(coordinates) = geometry.coordinates {
                         for polygon in coordinates {
                             for ring in polygon {
@@ -121,8 +115,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             mapView.addOverlay(polygon)
         }
     }
-    
-    // Делегатный метод для рендеринга overlay
+    // Delegate method for rendering overlays
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let polygonOverlay = overlay as? MKPolygon {
             let renderer = MKPolygonRenderer(polygon: polygonOverlay)
@@ -143,8 +136,7 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
     
-    
-    // Если пользователь разрешил использовать геопозицию
+    // If the user has granted location permission
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let status = manager.authorizationStatus
         if status == .authorizedWhenInUse || status == .authorizedAlways {
@@ -152,68 +144,55 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
     }
     
-    // Метод делегата, который срабатывает при получении локации
+    // Delegate method triggered when location is updated
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let userCoordinate = location.coordinate
-        
-        // Настроим камеру на текущие координаты пользователя
-        setMapCamera(to: userCoordinate)
-        
-        // Останавливаем обновление локации после получения данных
+        defaultCoordinate = userCoordinate
+        setInitialMapCamera()
         locationManager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Не удалось получить локацию: \(error.localizedDescription)")
+        print("Failed to get location: \(error.localizedDescription)")
     }
     
-    // Устанавливаем начальное местоположение на центр Украины
     private func setInitialMapCamera() {
-        let centerCoordinate = CLLocationCoordinate2D(latitude: 48.3794, longitude: 31.1656) // Центр Украины
-        let camera = MKMapCamera(lookingAtCenter: centerCoordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
+        let camera = MKMapCamera(lookingAtCenter: defaultCoordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
         mapView.setCamera(camera, animated: true)
     }
     
-    // Настроить камеру на координаты пользователя
-    private func setMapCamera(to coordinate: CLLocationCoordinate2D) {
-        let camera = MKMapCamera(lookingAtCenter: coordinate, fromDistance: 50_000_000, pitch: 0, heading: 0)
-        mapView.setCamera(camera, animated: true)
-    }
-  
     deinit {
         NotificationCenter.default.removeObserver(self, name: Notification.Name("CountrySelected"), object: nil)
     }
- 
+    
     func resetAllCountryHighlights() {
         mapView.removeOverlays(mapView.overlays)
     }
-
+    
     func highlightCountry(at index: Int) {
-        guard index < selectedOrSavedCountries.count else { return }
+        guard index < selectedOrSavedCountries.count else {
+            stopRecording()
+            return
+        }
         let country = selectedOrSavedCountries[index]
-        
         if let geoJSON = loadGeoJSON() {
-            // Фильтруем GeoJSON, чтобы оставить только нужную страну
+            // Filter GeoJSON to keep only the selected country
             let filteredGeoJSON = GeoJSON(
                 type: geoJSON.type,
                 features: geoJSON.features.filter { $0.properties?.name == country.name }
             )
-            
-            // Добавляем полигон на карту
+            // Add the polygon to the map
             addSelectedCountriesPolygons(geoJSON: filteredGeoJSON)
-            
-            // Перемещаем камеру к области полигона
+            // Move the camera to the polygon area
             moveToPolygon(for: filteredGeoJSON)
         }
     }
     
     func moveToPolygon(for geoJSON: GeoJSON) {
         var boundingMapRect: MKMapRect = .null
-        
         for feature in geoJSON.features {
             guard let geometry = feature.geometry else { continue }
-            
             switch geometry.type {
             case "Polygon":
                 if case let .polygon(coordinates) = geometry.coordinates {
@@ -236,12 +215,12 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
             }
         }
         
-        // Перемещаем камеру к области полигона
+        // Move the camera to the polygon area
         if !boundingMapRect.isNull {
-            mapView.setVisibleMapRect(boundingMapRect, edgePadding: UIEdgeInsets(top: 50, left: 50, bottom: 50, right: 50), animated: true)
+            mapView.setVisibleMapRect(boundingMapRect, edgePadding: UIEdgeInsets(top: 120, left: 120, bottom: 120, right: 120), animated: true)
         }
     }
-
+    
     private func createPolygon(from coordinatesArray: [[Double]]) -> MKPolygon {
         var coordinates = [CLLocationCoordinate2D]()
         for coordinatePair in coordinatesArray {
@@ -253,81 +232,59 @@ class GlobeViewController: UIViewController, MKMapViewDelegate, CLLocationManage
         }
         return MKPolygon(coordinates: coordinates, count: coordinates.count)
     }
-
     
-    func highlightNextCountry() {
-        // Если все страны подсвечены, останавливаем таймер
+    
+    func stopRecording() {
         if currentCountryIndex >= selectedOrSavedCountries.count {
             timer?.invalidate()
             timer = nil
-         //   setInitialMapCamera()
-            stopRecording()
+            setInitialMapCamera()
+            buttonsStackView.isHidden = false
+            recorder.stopRecording { [weak self] (previewController, error) in
+                self?.timer?.invalidate()
+                self?.currentCountryIndex = 0
+                if let error = error {
+                    print("Error stopping recording: \(error.localizedDescription)")
+                    return
+                }
+                if let previewController = previewController {
+                    previewController.previewControllerDelegate = self
+                    self?.present(previewController, animated: true, completion: nil)
+                }
+            }
             return
         }
-        
-        // Подсвечиваем текущую страну
-        highlightCountry(at: currentCountryIndex)
-        
-        // Увеличиваем индекс
-        currentCountryIndex += 1
-        
-        
     }
- 
+    
     func startRecording() {
-        let recorder = RPScreenRecorder.shared()
-        guard recorder.isAvailable else {
-            print("Запись экрана недоступна на данном устройстве")
-            return
-        }
+        setInitialMapCamera()
         recorder.startRecording { error in
+            self.startCountriesAnimation()
             if let error = error {
-                print("Ошибка при запуске записи: \(error.localizedDescription)")
+                print("Error starting recording: \(error.localizedDescription)")
             } else {
-                print("Запись началась")
+                print("Recording started")
             }
         }
     }
     
-    func stopRecording() {
-           let recorder = RPScreenRecorder.shared()
-           recorder.stopRecording { [weak self] (previewController, error) in
-               if let error = error {
-                   print("Ошибка при остановке записи: \(error.localizedDescription)")
-                   return
-               }
-               if let previewController = previewController {
-                   previewController.previewControllerDelegate = self
-                   self?.present(previewController, animated: true, completion: nil)
-               }
-           }
-       }
+    private func startCountriesAnimation() {
+        self.timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            highlightCountry(at: currentCountryIndex)
+            currentCountryIndex += 1
+        }
+    }
+    
     func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
         previewController.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func playAnimationButton(_ sender: Any) {
-       
-        // Сбросить все подсветки
-        setInitialMapCamera()
-        startRecording()
+        buttonsStackView.isHidden = true
         resetAllCountryHighlights()
-        // Сброс индекса
-        currentCountryIndex = 0
-        
-        // Остановить предыдущий таймер, если он запущен
-        timer?.invalidate()
-        
-        // Задержка перед началом анимации
-        DispatchQueue.main.asyncAfter(deadline:  .now() + 1.0) {
-            // Запуск таймера
-            self.timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-                guard let self = self else { return }
-                self.highlightNextCountry()
-            }
-        }
+        startRecording()
     }
-    
     
     @IBAction func addCountryButton(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)

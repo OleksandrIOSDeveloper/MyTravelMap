@@ -22,7 +22,7 @@
                                 <standardMapConfiguration key="preferredConfiguration"/>
                             </mapView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="29I-pe-dxT">
-                                <rect key="frame" x="129" y="768" width="135" height="60"/>
+                                <rect key="frame" x="129" y="753" width="135" height="60"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RCx-SZ-cmd">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -95,7 +95,7 @@
                         <constraints>
                             <constraint firstItem="29I-pe-dxT" firstAttribute="centerX" secondItem="1wa-3S-3o2" secondAttribute="centerX" id="7wu-bh-syi"/>
                             <constraint firstItem="1wa-3S-3o2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="K4a-5H-4Jz"/>
-                            <constraint firstItem="29I-pe-dxT" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="10" id="UUP-2B-l4n"/>
+                            <constraint firstItem="29I-pe-dxT" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-5" id="UUP-2B-l4n"/>
                             <constraint firstItem="1wa-3S-3o2" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ZUo-wb-Zio"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="1wa-3S-3o2" secondAttribute="trailing" id="mvG-BE-HhX"/>
                             <constraint firstAttribute="bottom" secondItem="1wa-3S-3o2" secondAttribute="bottom" id="x3c-Xx-DSM"/>
@@ -103,6 +103,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="4WB-Cu-CPM"/>
                     <connections>
+                        <outlet property="buttonsStackView" destination="29I-pe-dxT" id="Ot1-wk-zWy"/>
                         <outlet property="mapView" destination="1wa-3S-3o2" id="ndv-KH-ciD"/>
                     </connections>
                 </viewController>

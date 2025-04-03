@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  MyTravelMap
 //
-//  Created by Александр Родителев on 19.08.2024.
+//  Created by Oleksandr Roditeiliev on 19.08.2024.
 //
 
 import UIKit

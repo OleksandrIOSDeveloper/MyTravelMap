@@ -2,7 +2,7 @@
 //  ModelGeoJson.swift
 //  MyTravelMap
 //
-//  Created by Александр Родителев on 01.10.2024.
+//  Created by Oleksandr Roditeiliev on 01.10.2024.
 //
 
 import Foundation
@@ -17,19 +17,19 @@ struct GeoJSONGeometry: Codable {
 }
 
 enum GeoJSONCoordinates: Codable {
-    case polygon([[[Double]]])        // Для Polygon
-    case multiPolygon([[[[Double]]]]) // Для MultiPolygon
+    case polygon([[[Double]]])        // For Polygon
+    case multiPolygon([[[[Double]]]]) // For MultiPolygon
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         
-        // Пробуем декодировать как MultiPolygon
+        // Try to decode as MultiPolygonn
         if let multiPolygon = try? container.decode([[[[Double]]]].self) {
             self = .multiPolygon(multiPolygon)
             return
         }
         
-        // Пробуем декодировать как Polygon
+        // Try to decode as Polygon
         if let polygon = try? container.decode([[[Double]]].self) {
             self = .polygon(polygon)
             return

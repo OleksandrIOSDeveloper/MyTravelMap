@@ -2,7 +2,7 @@
 //  CountriesListViewController.swift
 //  MyTravelMap
 //
-//  Created by Александр Родителев on 21.08.2024.
+//  Created by Oleksandr Roditeiliev on 21.08.2024.
 //
 
 import UIKit
@@ -20,10 +20,8 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
         loadCountries()
         setupUI()
     }
@@ -31,12 +29,10 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     func setupUI() {
            countryPickerView.delegate = self
            countryPickerView.dataSource = self
-           
            countriesTableView.dataSource = self
            countriesTableView.delegate = self
            countriesTableView.dragDelegate = self
            countriesTableView.dragInteractionEnabled = true
-           
            countriesTableView.separatorStyle = .none
            countriesTableView.dragInteractionEnabled = true
            countriesTableView.allowsSelection = false
@@ -55,10 +51,10 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     
     func countryPickerView(_ countryPickerView: CountryPickerView, didSelectCountry country: CPVCountry) {
         if !countryArray.contains(where: { $0.code == country.code }) {
-            let countryData = CountryData(country: country) // Создаем объект CountryData
+            let countryData = CountryData(country: country)
             countryArray.append(countryData)
             saveCountries()
-            print(countryData)//
+            print(countryData)
             countriesTableView.reloadData()
         }
     }
@@ -70,10 +66,9 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CountryTableViewCell", for: indexPath) as! CountryTableViewCell
         let countryData = countryArray[indexPath.row]
-        
-        // Используем countryPickerView для получения объекта CPVCountry
+        // Use countryPickerView to get the CPVCountry object
         if let country = countryPickerView.countries.first(where: { $0.code == countryData.code }) {
-            cell.setup(with: country) // Передаем найденный объект в ячейку
+            cell.setup(with: country) // Pass the found object to the cell
         } else {
             cell.countryLabel.text = "Country is NOT!!!"
         }
@@ -88,16 +83,16 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
         }
     }
     
-    // Позначити, що всі рядки можна переміщувати
+    // Indicate that all rows can be moved
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    // Логіка переміщення рядка
+    // Logic for moving a row
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let mover = countryArray.remove(at: sourceIndexPath.row)
         countryArray.insert(mover, at: destinationIndexPath.row)
-        saveCountries() // Зберегти зміни у масиві країн
+        saveCountries() // Save changes to the country array
     }
    
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
@@ -105,12 +100,12 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
           dragItem.localObject = countryArray[indexPath.row]
           return [ dragItem ]
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
           return 50 
       }
     
-    // MARK: - сохр и загрузк стран в UserDefoults
-    
+    // MARK: - Saving and loading countries in UserDefaults
     func saveCountries() {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(countryArray) {
@@ -133,12 +128,12 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
           
           switch status {
           case .authorizedWhenInUse, .authorizedAlways:
-              // Стартуем обновление локации только если разрешение дано
+              // Start updating location only if permission is granted
               locationManager.startUpdatingLocation()
           case .denied, .restricted:
               print("Разрешение на использование локации запрещено")
           case .notDetermined:
-              // Если статус еще не определен, ничего не делаем
+              // If the status is not yet determined, do nothing
               break
           @unknown default:
               break
@@ -148,18 +143,15 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        
-        // Останавливаем обновления локации
+        // Stop location updates
         locationManager.stopUpdatingLocation()
-        
-        // Получаем страну на основе геолокации
+        // Get the country based on geolocation
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             if let error = error {
-                print("Ошибка геокодирования: \(error)")
+                print("Geocoding error: \(error)")
                 return
             }
-            
             if let placemark = placemarks?.first, let countryCode = placemark.isoCountryCode {
                 self?.setCountryFromLocation(countryCode: countryCode)
             }
@@ -167,15 +159,14 @@ class CountriesListViewController: UIViewController, CountryPickerViewDelegate, 
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Не удалось получить локацию: \(error.localizedDescription)")
+        print("Failed to get location: \(error.localizedDescription)")
     }
    
     func setCountryFromLocation(countryCode: String) {
-        // Находим страну в CountryPickerView по ISO-коду
+        // Find the country in CountryPickerView by ISO code
         if let country = countryPickerView.countries.first(where: { $0.code == countryCode }) {
             let countryData = CountryData(country: country)
-            
-            // Добавляем страну в начало массива countryArray
+            // Add the country to the beginning of the countryArray
             if !countryArray.contains(where: { $0.code == country.code }) {
                 countryArray.insert(countryData, at: 0)
                 saveCountries()

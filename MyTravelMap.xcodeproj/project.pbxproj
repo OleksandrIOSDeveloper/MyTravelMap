@@ -53,6 +53,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD9D1E9C2D9F1ACA0068E606 /* System App */ = {
+			isa = PBXGroup;
+			children = (
+				DDA159E62C73967100D9B721 /* AppDelegate.swift */,
+				DDA159E82C73967100D9B721 /* SceneDelegate.swift */,
+			);
+			path = "System App";
+			sourceTree = "<group>";
+		};
+		DD9D1E9D2D9F1AE70068E606 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DD09D39F2CB574F8009A01DA /* ExtensionUIColor.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		DDA159DA2C73967100D9B721 = {
 			isa = PBXGroup;
 			children = (
@@ -72,22 +89,45 @@
 		DDA159E52C73967100D9B721 /* MyTravelMap */ = {
 			isa = PBXGroup;
 			children = (
-				DDA159E62C73967100D9B721 /* AppDelegate.swift */,
+				DD9D1E9C2D9F1ACA0068E606 /* System App */,
+				DDF0D2272D9EB5EB0004909D /* ViewControllers */,
+				DDF0D2282D9EB6040004909D /* Views */,
+				DDF0D2292D9EB62E0004909D /* Models */,
+				DD9D1E9D2D9F1AE70068E606 /* Extensions */,
 				DD9EE0CF2CAC45D600CB49AB /* countries.geo.json */,
-				DD9EE0D12CAC463600CB49AB /* ModelGeoJson.swift */,
-				DDA159E82C73967100D9B721 /* SceneDelegate.swift */,
-				DDA159EA2C73967100D9B721 /* GlobeViewController.swift */,
-				DD09D39F2CB574F8009A01DA /* ExtensionUIColor.swift */,
-				DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */,
-				DD3FD02E2CA1BC7500A1B54C /* CountryData.swift */,
-				DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */,
-				DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */,
 				DDA159EC2C73967100D9B721 /* Main.storyboard */,
 				DDA159EF2C73967200D9B721 /* Assets.xcassets */,
 				DDA159F12C73967200D9B721 /* LaunchScreen.storyboard */,
 				DDA159F42C73967200D9B721 /* Info.plist */,
 			);
 			path = MyTravelMap;
+			sourceTree = "<group>";
+		};
+		DDF0D2272D9EB5EB0004909D /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				DDA159EA2C73967100D9B721 /* GlobeViewController.swift */,
+				DDD7DE662C76533D007B6F86 /* CountriesListViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		DDF0D2282D9EB6040004909D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DD8509322C9B499300AE5FD3 /* CountryTableViewCell.swift */,
+				DD8509332C9B499300AE5FD3 /* CountryTableViewCell.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DDF0D2292D9EB62E0004909D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD9EE0D12CAC463600CB49AB /* ModelGeoJson.swift */,
+				DD3FD02E2CA1BC7500A1B54C /* CountryData.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
